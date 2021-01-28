@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.epam.digital.data.platform.starter.security.PlatformSecurityAutoConfiguration,\
+com.epam.digital.data.platform.starter.security.PermitAllSecurityAutoConfiguration
