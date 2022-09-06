@@ -47,4 +47,6 @@ public class JwtClaimsDto extends IDToken {
   private String fullName;
   private SubjectType subjectType;
   private boolean representative;
+  @JsonProperty("KATOTTG")
+  private List<String> katottg;
 }
