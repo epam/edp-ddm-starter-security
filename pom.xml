@@ -17,9 +17,9 @@
     <spring.boot.version>2.6.1</spring.boot.version>
     <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
     <maven.failsafe.plugin.version>2.22.2</maven.failsafe.plugin.version>
-    <keykloac-core.version>12.0.4</keykloac-core.version>
     <guava.version>30.1-jre</guava.version>
     <nimbus-jose-jwt.version>9.12.1</nimbus-jose-jwt.version>
+    <keycloak-core.version>15.1.1</keycloak-core.version>
     <sonar.coverage.exclusions>
       **/com/epam/digital/data/platform/starter/security/dto/**
     </sonar.coverage.exclusions>
@@ -28,6 +28,11 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-core</artifactId>
+        <version>${keycloak-core.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
@@ -101,7 +106,6 @@
     <dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-core</artifactId>
-      <version>${keykloac-core.version}</version>
     </dependency>
   </dependencies>
 
