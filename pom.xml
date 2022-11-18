@@ -20,6 +20,8 @@
     <guava.version>30.1-jre</guava.version>
     <nimbus-jose-jwt.version>9.12.1</nimbus-jose-jwt.version>
     <keycloak-core.version>15.1.1</keycloak-core.version>
+    <spring-security-core.version>5.7.5</spring-security-core.version>
+
     <sonar.coverage.exclusions>
       **/com/epam/digital/data/platform/starter/security/dto/**
     </sonar.coverage.exclusions>
@@ -40,16 +42,21 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-	  <dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-api</artifactId>
-		<version>${log4j.version}</version>
-	  </dependency>
-	  <dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-core</artifactId>
-		<version>${log4j.version}</version>
-	  </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${spring-security-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
