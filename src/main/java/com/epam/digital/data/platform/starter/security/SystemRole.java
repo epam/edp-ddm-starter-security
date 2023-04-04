@@ -24,7 +24,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SystemRole {
 
-  OFFICER("officer"), CITIZEN("citizen"), TREMBITA_INVOKER("trembita-invoker");
+  OFFICER("officer"), UNREGISTERED_OFFICER("unregistered-officer"), CITIZEN("citizen"), TREMBITA_INVOKER("trembita-invoker");
 
   private final String name;
 

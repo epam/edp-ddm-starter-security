@@ -35,7 +35,10 @@ public enum KeycloakPlatformRole {
   LEGAL("legal"),
   UNREGISTERED_ENTREPRENEUR("unregistered-entrepreneur"),
   UNREGISTERED_INDIVIDUAL("unregistered-individual"),
-  UNREGISTERED_LEGAL("unregistered-legal");
+  UNREGISTERED_LEGAL("unregistered-legal"),
+  UNREGISTERED_OFFICER("unregistered-officer"),
+  OFFICER("officer"),
+  AUDITOR("auditor");
 
   private final String name;
 
