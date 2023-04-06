@@ -47,6 +47,42 @@ public class JwtClaimsDto extends IDToken {
   private String fullName;
   private SubjectType subjectType;
   private boolean representative;
+  @Deprecated(forRemoval = true)
   @JsonProperty("KATOTTG")
   private List<String> katottg;
+
+  public void setEdrpou(Object edrpou) {
+    this.edrpou = objectToString(edrpou);
+  }
+
+  public void setDrfo(Object drfo) {
+    this.drfo = objectToString(drfo);
+  }
+
+  public void setFullName(Object fullName) {
+    this.fullName = objectToString(fullName);
+  }
+
+  public void setSubjectType(Object subjectType) {
+    this.subjectType = SubjectType.valueOf(objectToString(subjectType));
+  }
+
+  public void setRepresentative(Object representative) {
+    if (List.class.isInstance(representative)) {
+      this.representative = Boolean.parseBoolean(((List<String>) representative).get(0));
+    } else if (Boolean.class.isInstance(representative)) {
+      this.representative = (Boolean) representative;
+    } else {
+      this.representative = false;
+    }
+  }
+
+  private String objectToString(Object attribute) {
+    if (List.class.isInstance(attribute)) {
+      return ((List<String>) attribute).get(0);
+    } else if (String.class.isInstance(attribute)) {
+      return (String) attribute;
+    }
+    return "";
+  }
 }

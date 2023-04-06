@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,11 @@ public class TokenParser {
   public JwtClaimsDto parseClaims(String token) {
     try {
       var signedJWT = SignedJWT.parse(token);
-      return objectMapper.readValue(signedJWT.getPayload().toString(), JwtClaimsDto.class);
+      var claims =  objectMapper.readValue(signedJWT.getPayload().toString(), JwtClaimsDto.class);
+      if (Objects.nonNull(claims.getKatottg())) {
+        claims.setOtherClaims("KATOTTG", claims.getKatottg());
+      }
+      return claims;
     } catch (ParseException | JsonProcessingException e) {
       throw new JwtParsingException(e.getMessage());
     }

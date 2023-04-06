@@ -17,14 +17,19 @@
 package com.epam.digital.data.platform.starter.security.jwt;
 
 import com.epam.digital.data.platform.starter.security.dto.JwtClaimsDto;
-import com.epam.digital.data.platform.starter.security.exception.JwtClaimIncorrectAttributeException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class JwtClaimsUtils {
 
+  @Deprecated(forRemoval = true)
   public static final String JWT_CLAIMS_FIXED_ATTRIBUTE_KATOTTG = "katottg";
   public static final String JWT_CLAIMS_FIXED_ATTRIBUTE_EDRPOY = "edrpou";
   public static final String JWT_CLAIMS_FIXED_ATTRIBUTE_DRFO = "drfo";
@@ -50,19 +55,15 @@ public class JwtClaimsUtils {
     return dto.getOtherClaims().containsKey(attribute);
   }
 
-  public static Object getAttributeValue(JwtClaimsDto dto, String attribute) throws JwtClaimIncorrectAttributeException {
+  public static Object getAttributeValue(JwtClaimsDto dto, String attribute) {
     if (JWT_CLAIMS_FIXED_ATTRIBUTES.contains(attribute)) {
       return JWT_KNOWN_ATTRS_MAPPING.get(attribute).apply(dto);
-    }
-
-    if (!dto.getOtherClaims().containsKey(attribute)) {
-      throw new JwtClaimIncorrectAttributeException("Attribute not found: " + attribute);
     }
 
     return dto.getOtherClaims().get(attribute);
   }
 
-  public static List<String> getAttributeValueAsStringList(JwtClaimsDto dto, String attribute) throws JwtClaimIncorrectAttributeException {
+  public static List<String> getAttributeValueAsStringList(JwtClaimsDto dto, String attribute) {
     var res = getAttributeValue(dto, attribute);
     if (res == null) {
       return new ArrayList<>();

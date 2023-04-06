@@ -42,4 +42,29 @@ public class TokenParserTest {
     assertThat(jwtClaimsDto.isRepresentative()).isTrue();
     assertThat(jwtClaimsDto.getSubjectType()).isEqualTo(SubjectType.INDIVIDUAL);
   }
+
+  @Test
+  void shouldParseJwtTokenWithMultivaluedAttributes() throws IOException {
+    var token = new String(ByteStreams.toByteArray(
+        TokenProviderTest.class.getResourceAsStream(
+            "/json/officerAccessTokenWithMultivaluedServiceAttributes.json")));
+
+    var jwtClaimsDto = tokenParser.parseClaims(token);
+
+    assertThat(jwtClaimsDto).isNotNull();
+    assertThat(jwtClaimsDto.isRepresentative()).isTrue();
+    assertThat(jwtClaimsDto.getSubjectType()).isEqualTo(SubjectType.LEGAL);
+  }
+
+  @Test
+  public void shouldParseKatottgInTwoFields() throws Exception {
+    var token = new String(ByteStreams.toByteArray(
+            TokenProviderTest.class.getResourceAsStream("/json/katottgToken")));
+
+    var jwtClaimsDto = tokenParser.parseClaims(token);
+
+    assertThat(jwtClaimsDto.getOtherClaims().get("KATOTTG")).isNotNull();
+    assertThat(jwtClaimsDto.getKatottg()).isNotNull();
+
+  }
 }

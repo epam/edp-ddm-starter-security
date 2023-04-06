@@ -16,21 +16,17 @@
 
 package com.epam.digital.data.platform.starter.security.jwt;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import com.epam.digital.data.platform.starter.security.dto.JwtClaimsDto;
-import com.epam.digital.data.platform.starter.security.dto.enums.SubjectType;
-import com.epam.digital.data.platform.starter.security.exception.JwtClaimIncorrectAttributeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.ByteStreams;
+import java.io.IOException;
+import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 public class JwtClaimsUtilsTest {
@@ -49,7 +45,7 @@ public class JwtClaimsUtilsTest {
     jwt.setOtherClaims("claim2", "claim2");
 
     assertThat(JwtClaimsUtils.getAttributeValue(jwt, "drfo")).isEqualTo("drfo");
-    assertThatThrownBy(() -> JwtClaimsUtils.getAttributeValue(jwt, "random")).isInstanceOf(JwtClaimIncorrectAttributeException.class);
+    assertNull( JwtClaimsUtils.getAttributeValue(jwt, "random"));
     assertThat(JwtClaimsUtils.getAttributeValue(jwt, "edrpou")).isEqualTo("edrpou");
     assertThat(JwtClaimsUtils.getAttributeValueAsStringList(jwt, "katottg")).hasSize(2);
     assertThat(JwtClaimsUtils.getAttributeValueAsStringList(jwt, "katottg").get(0)).isEqualTo("el1");
