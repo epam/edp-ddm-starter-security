@@ -4,27 +4,31 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.2.0</version>
+  </parent>
+
   <groupId>com.epam.digital.data.platform</groupId>
   <artifactId>ddm-starter-security</artifactId>
-  <version>1.8.0</version>
+  <version>2.0.0</version>
 
   <name>ddm-starter-security</name>
   <description>Security spring boot starter</description>
 
   <properties>
-    <java.version>11</java.version>
-    <log4j.version>2.17.0</log4j.version>
-    <spring.boot.version>2.7.11</spring.boot.version>
-    <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
-    <maven.failsafe.plugin.version>2.22.2</maven.failsafe.plugin.version>
-    <guava.version>30.1-jre</guava.version>
-    <nimbus-jose-jwt.version>9.12.1</nimbus-jose-jwt.version>
-    <keycloak-core.version>15.1.1</keycloak-core.version>
-
+    <java.version>17</java.version>
+    <guava.version>33.1.0-jre</guava.version>
+    <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
+    <keycloak-core.version>20.0.3</keycloak-core.version>
     <sonar.coverage.exclusions>
       **/com/epam/digital/data/platform/starter/security/dto/**
     </sonar.coverage.exclusions>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring-core.version>6.1.5</spring-core.version>
+    <spring-web.version>6.1.5</spring-web.version>
+    <cyclonedx-maven-plugin.version>2.7.10</cyclonedx-maven-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -35,21 +39,14 @@
         <version>${keycloak-core.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring.boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring-core.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-api</artifactId>
-        <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-core</artifactId>
-        <version>${log4j.version}</version>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring-web.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -119,20 +116,6 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-        </configuration>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>3.8.1</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven.surefire.plugin.version}</version>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
@@ -165,7 +148,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${maven.failsafe.plugin.version}</version>
         <executions>
           <execution>
             <goals>
@@ -178,7 +160,7 @@
       <plugin>
         <groupId>org.cyclonedx</groupId>
         <artifactId>cyclonedx-maven-plugin</artifactId>
-        <version>2.7.4</version>
+        <version>${cyclonedx-maven-plugin.version}</version>
         <configuration>
           <outputName>bom-dt</outputName>
         </configuration>

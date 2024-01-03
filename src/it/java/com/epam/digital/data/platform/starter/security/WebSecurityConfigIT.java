@@ -136,7 +136,7 @@ public class WebSecurityConfigIT {
   }
 
   @Configuration
-  @Import({MockMvcAutoConfiguration.class, JacksonAutoConfiguration.class})
+  @Import({MockMvcAutoConfiguration.class, JacksonAutoConfiguration.class, PlatformSecurityAutoConfiguration.class})
   protected static class TestConfiguration {
 
     @RestController

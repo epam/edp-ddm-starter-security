@@ -22,22 +22,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Order(WebSecurityConfig.DEFAULT_ORDER)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
   public static final int DEFAULT_ORDER = Ordered.HIGHEST_PRECEDENCE + 10;
 
@@ -49,11 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final boolean csrfEnabled;
 
   public WebSecurityConfig(
-      JwtConfigurer securityConfigurerAdapter,
-      AccessDeniedHandler accessDeniedHandler,
-      AuthenticationEntryPoint authenticationErrorHandler,
-      Whitelist whitelist,
-      @Value("${platform.security.csrf.enabled:false}") boolean csrfEnabled) {
+          JwtConfigurer securityConfigurerAdapter,
+          AccessDeniedHandler accessDeniedHandler,
+          AuthenticationEntryPoint authenticationErrorHandler,
+          Whitelist whitelist,
+          @Value("${platform.security.csrf.enabled:false}") boolean csrfEnabled) {
     this.securityConfigurerAdapter = securityConfigurerAdapter;
     this.accessDeniedHandler = accessDeniedHandler;
     this.authenticationErrorHandler = authenticationErrorHandler;
@@ -61,39 +63,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     this.csrfEnabled = csrfEnabled;
   }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring().requestMatchers(whitelist.getRequestMatcher());
+  }
+  @Bean
+  public SecurityFilterChain generalFilterChain(HttpSecurity http) throws Exception {
+
     if (csrfEnabled) {
-      http = http.csrf().csrfTokenRepository(tokenRepository()).and();
+      CsrfTokenRequestAttributeHandler delegate = new CsrfTokenRequestAttributeHandler();
+      delegate.setCsrfRequestAttributeName(null);
+      http.csrf(crf -> crf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).csrfTokenRequestHandler(delegate));
     } else {
-      http = http.csrf().disable();
+      http.csrf(AbstractHttpConfigurer::disable);
     }
-    http.exceptionHandling()
-        .authenticationEntryPoint(authenticationErrorHandler)
-        .accessDeniedHandler(accessDeniedHandler)
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .apply(securityConfigurerAdapter);
+    http.
+            exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationErrorHandler).accessDeniedHandler(accessDeniedHandler)).
+            sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
+            authorizeHttpRequests(auth -> auth.anyRequest().authenticated()).with(securityConfigurerAdapter, Customizer.withDefaults());
+    return http.build();
   }
-
-  @Override
-  public void configure(WebSecurity web) {
-    web.ignoring().requestMatchers(whitelist.getRequestMatcher());
-  }
-
   @Bean
   public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
     return new InMemoryUserDetailsManager();
   }
 
-  @Bean
-  public CsrfTokenRepository tokenRepository() {
-    return CookieCsrfTokenRepository.withHttpOnlyFalse();
-  }
+
 }

@@ -1,0 +1,2 @@
+com.epam.digital.data.platform.starter.security.PlatformSecurityAutoConfiguration
+com.epam.digital.data.platform.starter.security.PermitAllSecurityAutoConfiguration

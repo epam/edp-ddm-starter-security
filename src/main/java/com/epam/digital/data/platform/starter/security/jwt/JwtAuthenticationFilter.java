@@ -17,15 +17,16 @@
 package com.epam.digital.data.platform.starter.security.jwt;
 
 import com.epam.digital.data.platform.starter.security.config.Whitelist;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Order(0)
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   public static final String AUTHORIZATION_HEADER = "x-access-token";
@@ -44,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-      FilterChain filterChain) throws ServletException, IOException {
+                               FilterChain filterChain) throws ServletException, IOException {
     String jwt = resolveToken(request);
 
     if (StringUtils.hasText(jwt)) {

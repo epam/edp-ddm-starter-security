@@ -20,8 +20,9 @@ import com.epam.digital.data.platform.starter.security.dto.ErrorDto;
 import com.epam.digital.data.platform.starter.security.dto.ErrorRestResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.http.MediaType;
@@ -36,7 +37,7 @@ public class DefaultAccessDeniedHandler implements AccessDeniedHandler {
   @Override
   @SuppressWarnings("findsecbugs:XSS_SERVLET")
   public void handle(HttpServletRequest request, HttpServletResponse response,
-      AccessDeniedException accessDeniedException) throws IOException {
+                     AccessDeniedException accessDeniedException) throws IOException {
     // This is invoked when user tries to access a secured REST resource without the necessary authorization
     // We just send a 403 Forbidden response because there is no 'error' page to redirect to
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
